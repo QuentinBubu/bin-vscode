@@ -55,9 +55,12 @@ export function activate(): void {
 
     try {
       const bin = await createBin({ code, lang: language, maxusages: maxUsages, lifetime });
-      const selection = await window.showInformationMessage(`[${bin}](${bin})`, 'Open');
+      const selection = await window.showInformationMessage(`[${bin}](${bin})`, 'Open', 'Copy link');
       if (selection === 'Open') {
         vscode.env.openExternal(vscode.Uri.parse(bin));
+      } else if (selection === 'Copy link') {
+        await vscode.env.clipboard.writeText(bin);
+        window.showInformationMessage('The link has been copied!')
       }
     } catch (error) {
       window.showErrorMessage(error.toString());
